@@ -1,0 +1,39 @@
+
+#pragma warning (disable:4996)
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+
+int arr[10] = { 0, };
+bool check[10] = { false, };
+
+void dfs(int k, int cnt, int sum) {
+	if (cnt == 7) {
+		if (sum == 100) {
+			for (int i = 1; i <= 9; i++) {
+				if (check[i]) printf("%d\n", arr[i]);
+			}
+			return ;
+		}
+		return;
+	}
+
+	for (int l = k + 1; l <= 9; l++) {
+		check[l] = true;
+		dfs(l, cnt + 1, sum + arr[l]);
+		check[l] = false;
+	}
+}
+int main() {
+	freopen("input_2309.txt", "r", stdin);
+	for (int i = 1; i <= 9;i++) {
+		scanf("%d", &arr[i]);
+	}
+	
+	sort(arr, arr + 10);
+
+	for(int j = 0; j <=1 ; j ++)
+		dfs(j,0,0);
+	
+	return 0;
+}
