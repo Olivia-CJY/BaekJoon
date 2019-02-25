@@ -1,0 +1,79 @@
+#pragma warning (disable : 4996)
+#include <stdio.h>
+int T, K;
+int map[5][9];
+int roat[2];
+int affect[4];
+int dir[5];
+
+void rotation(int gear) {
+	if (dir[gear] == 1) {
+		int temp = map[gear][8];
+		for (int k = 7; k >=1; k--) {
+			map[gear][k +1] = map[gear][k];
+		}
+		map[gear][1] = temp;
+		}
+
+	if (dir[gear] == -1) {
+		int temp = map[gear][1];
+		for (int k = 2; k <= 8; k++) {
+			map[gear][k - 1] = map[gear][k];
+		}
+		map[gear][8] = temp;
+	}
+}
+
+void decideR(int gear, int d) {
+	if (gear == 5) return;
+	
+	dir[gear] = d;
+	if (affect[gear] == 1) {
+		decideR(gear + 1, d * (-1));
+	}
+	else return;
+}
+
+void decideL(int gear, int d) {
+	if (gear == 0) return;
+	dir[gear] = d;
+	if (affect[gear - 1] == 1) {
+		decideL(gear - 1, d * (-1));
+	}
+	else return;
+}
+
+int main() {
+	freopen("input_4013.txt", "r", stdin);
+	scanf("%d", &T);
+	for (int tc = 1; tc <= T; tc++) {
+		scanf("%d", &K);
+		for (int i = 1; i <= 4; i++) {
+			for (int j = 1; j <= 8; j++) {
+				scanf("%d", &map[i][j]);
+			}
+		}
+
+		for (int i = 0; i < K; i++) {
+			scanf("%d%d", &roat[0], &roat[1]);
+
+			for (int i = 1; i <= 3; i++) {
+				if (map[i][3] != map[i + 1][7]) affect[i] = 1; // S,N > 회전
+				else affect[i] = 0;
+			}
+
+			for (int i = 1; i <= 4; i++) dir[i] = 0;
+
+			decideR(roat[0], roat[1]);
+			decideL(roat[0], roat[1]);
+
+			for(int i = 1; i<= 4; i++)
+			rotation(i);
+
+		}
+		int ans = map[1][1] + 2*map[2][1] + 4*map[3][1] + 8*map[4][1];
+		printf("#%d %d\n", tc, ans);
+
+	}
+	return 0;
+}
