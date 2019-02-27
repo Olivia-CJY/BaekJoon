@@ -1,0 +1,57 @@
+#pragma warning (disable :4996)
+#include <stdio.h>
+#include <vector>
+
+using namespace std;
+int N;
+int map[4];
+bool visited[101][101] = { false, };
+int x, y, d, g;
+int dx[] = { 0, -1, 0, 1 };
+int dy[] = { 1, 0, -1, 0 };
+int ans;
+
+vector<int> v;
+
+int cal() {
+	for (int i = 0; i < 100; i++) {
+		for (int j = 0;j < 100; j++) {
+			if (visited[i][j] && visited[i + 1][j] && visited[i][j + 1] && visited[i + 1][j + 1])
+				ans++;
+		}
+	}
+	return ans;
+}
+
+void run() {
+	for (int i = 1; i <= g; i++) {
+		for (int j = v.size(); j > 0; j--) {
+			v.push_back((v[j - 1] + 1) % 4);
+		}
+	}
+
+	visited[x][y] = true;
+	for (int k = 0; k < v.size(); k++){
+		x += dx[v[k]]; y += dy[v[k]];
+		if (x < 0 || x > 100 || y < 0 || y > 100) 
+			continue;
+		visited[x][y] = true;
+	}
+}
+
+
+int main() {
+	freopen("input_15685.txt", "r", stdin);
+	scanf("%d", &N);
+	for (int i = 0; i < N; i++) {
+			scanf("%d%d%d%d", &y, &x, &d, &g);
+			v.clear();
+			v.push_back(d);
+			run();	//진행 방향 정하기, 그래프에 경로 표시
+	}
+
+	cal();
+	printf("%d\n", ans);
+	
+	return 0;
+}
