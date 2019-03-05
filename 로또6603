@@ -1,0 +1,29 @@
+#include <stdio.h>
+#define MAX 14
+
+int N;
+int arr[MAX];
+bool visited[MAX] = { false, };
+
+void dfs(int cnt, int q) {
+	if (cnt == 6) {
+		for (int i = 1; i <= N; i++) {
+			if (visited[i]) 
+				printf("%d ", arr[i]);
+		}
+		printf("\n");
+		return;
+	}
+
+	for (int j = q + 1; j <= N; j++) {
+		visited[j] = true;
+		dfs(cnt + 1, j);
+		visited[j] = false;
+	}
+
+}
+
+int main() {
+	freopen("input_6603.txt", "r", stdin);
+	while (true) {
+		scanf("%d", &N);
