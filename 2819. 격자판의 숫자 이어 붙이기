@@ -1,0 +1,57 @@
+//#pragma warning (disable :4996)
+#include <stdio.h>
+using namespace std;
+
+int map[5][5];
+int dx[] = { 0, -1, 0, 1 };
+int dy[] = { -1, 0, 1, 0 };
+bool check[10000000] = { false, };
+int num = 0;
+int ans;
+int sum;
+
+void dfs(int x, int y, int cnt, int sum) {
+	if (cnt == 7) {
+		if (!check[sum]) {
+			check[sum] = true;
+			ans++;
+		}
+		return;
+	}
+
+	for (int k = 0; k < 4; k++) {
+		int nx = x + dx[k]; int ny = y + dy[k];
+		if (nx <= 0 || nx > 4 || ny <= 0 || ny > 4) {
+			continue;
+		}
+
+		dfs(nx, ny, cnt + 1, sum * 10 + map[nx][ny]);
+
+	}
+}
+
+int main() {
+	//freopen("input_2819.txt", "r", stdin);
+	int T;
+	scanf("%d", &T);
+	for (int tc = 1; tc <= T; tc++) {
+		for (int i = 1; i <= 4; i++) {
+			for (int j = 1; j <= 4; j++) {
+				scanf("%d", &map[i][j]);
+			}
+		}
+
+		ans = 0;
+		for (int i = 0; i < 10000000; i++) check[i] = false;
+
+		for (int i = 1; i <= 4; i++) {
+			for (int j = 1; j <= 4; j++) {
+				dfs(i, j, 1, map[i][j]);
+			}
+		}
+
+		printf("#%d %d\n", tc, ans);
+	}
+
+	return 0;
+}
