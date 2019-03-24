@@ -1,0 +1,72 @@
+#pragma warning (disable : 4996)
+#include <stdio.h>
+int map[11][11];
+int cal[11][11];
+int T, N, M, C;
+int MAX;
+int fr, fc;
+
+
+void CAL(int r, int c, int cend, int checklimit, int maxcal, int num) {
+	if (num == 0) { fr = r; fc = c; }
+	if (checklimit > C) return;
+	if (cal[fr][fc] < maxcal) cal[fr][fc] = maxcal;
+
+	for (int k = c; k <= cend; k++) {
+		CAL(r, k+1, cend, checklimit + map[r][k], maxcal + map[r][k]*map[r][k], num+1);
+	}
+
+}
+
+void find_ans(int r, int c, int ans, int n) {
+	if (n == 2) {
+		if (MAX < ans) MAX = ans;
+		return;
+	}
+	int temp = c;
+
+	for (int i = r; i < N; i++) {
+		for (int j = temp; j <= N - M ; j++)
+		{
+			find_ans(i, j + M, ans + cal[i][j], n + 1);
+		}
+		temp = 0;
+	}
+}
+
+int main() {
+	freopen("input_2115.txt", "r", stdin);
+	scanf("%d", &T);
+
+	for (int tc = 1; tc <= T; tc++) {
+		scanf("%d%d%d", &N, &M, &C);
+
+
+		for (int i = 0;i < N; i++) {
+			for (int j = 0;j < N; j++) {
+				map[i][j] = 0;
+				cal[i][j] = 0;
+			}
+		}
+
+		for (int i = 0;i < N; i++) {
+			for (int j = 0;j < N; j++) {
+				scanf("%d", &map[i][j]);
+			}
+		}
+
+		for (int i = 0; i < N; i++) {
+			for (int j = 0;j < N - M + 1; j++) {
+				CAL(i, j, j + M - 1, 0, 0, 0);
+			}
+		}
+
+
+		MAX = 0;
+		find_ans(0, 0, 0, 0);
+
+		printf("#%d %d\n", tc, MAX);
+	}
+
+	return 0;
+}
